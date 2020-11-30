@@ -1,6 +1,6 @@
 
 public class Expression extends ExpressionTree {
-   BNode<String> root ;
+
    public String fullyParenthesized() {
       // add implementation here
       return "";
@@ -9,21 +9,25 @@ public class Expression extends ExpressionTree {
    public Expression(String s) {
       super();
       // add implementation here
-      ExpressionTree tree = this;
+      //ExpressionTree tree = this;
       try {
 
-
-         root = new BNode<String>("*",null,new BNode<String>("2",root,null,null) ,new BNode<String>("5",root,null,null));
+         BNode<String> node1 = new BNode<>("2",null,null,null);
+         BNode<String> node2 = new BNode<>("5",null,null,null);
+         BNode<String> root  = new BNode<String>("*",null,null,null);
 
          //root.setRight();
          //root.setLeft();
+         this.root = root;
+         node1.parent = root;
+         node2.parent = root;
 
-         tree.addRoot(root.data);
+         root.right = node1;
+         root.left = node2;
+         this.addRoot(root.data);
 
          treePrint(root);
 
-
-         System.out.println(tree.root);
 
       }catch (Exception e){
          System.out.println("");
