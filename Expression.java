@@ -15,7 +15,7 @@ public class Expression extends ExpressionTree {
       System.out.println(isOperator("- "));
       System.out.println(isOperator(" *"));
       System.out.println(isOperator(" /"));
-      System.out.println(isOperator(" x"));
+      System.out.println(isDigit("25"));
       try {
 
          BNode<String> node1 = new BNode<>("2",null,null,null);
@@ -51,6 +51,15 @@ public class Expression extends ExpressionTree {
       //remove the space from the operator
       op = op.replace(" ", "");
       return op.equals("+") || op.equals("-") || op.equals("*") || op.equals("/") ;
+   }
+
+   private boolean isDigit(String num){
+      try {
+         double value = Double.parseDouble(num);
+      }catch (NumberFormatException e){
+         return  false;
+      }
+      return true;
    }
 
 
