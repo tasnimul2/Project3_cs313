@@ -95,11 +95,12 @@ public class Expression extends ExpressionTree {
          //if we come across a + or a -, anything coming before it , up to the previous + or - is a term
 
           if(!isOperator(currChar)) {
-            sect= ""+ currChar;
+            sect+= ""+ currChar;
          }else {
              //if two operators are next to each other, it creates a white space. This avoids it.
-             if(sect.length() != 0) {
+             if(!sect.equals("")) {
                 list.add(sect);
+
              }
              sect = "";
              list.add(""+currChar);
