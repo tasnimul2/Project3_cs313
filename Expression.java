@@ -9,15 +9,19 @@ public class Expression extends ExpressionTree {
    public Expression(String s) {
       super();
       // add implementation here
-      //ExpressionTree tree = this;
+
+      System.out.println(s);
+      System.out.println(isOperator(" +"));
+      System.out.println(isOperator("- "));
+      System.out.println(isOperator(" *"));
+      System.out.println(isOperator(" /"));
+      System.out.println(isOperator(" x"));
       try {
 
          BNode<String> node1 = new BNode<>("2",null,null,null);
          BNode<String> node2 = new BNode<>("5",null,null,null);
          BNode<String> root  = new BNode<String>("*",null,null,null);
 
-         //root.setRight();
-         //root.setLeft();
          this.root = root;
          node1.parent = root;
          node2.parent = root;
@@ -26,7 +30,7 @@ public class Expression extends ExpressionTree {
          root.left = node2;
          this.addRoot(root.data);
 
-         treePrint(root);
+         treePrint(this.root);
 
 
       }catch (Exception e){
@@ -41,5 +45,13 @@ public class Expression extends ExpressionTree {
       // add implementation here
       return 0.0;
    }
+
+
+   private boolean isOperator(String op){
+      //remove the space from the operator
+      op = op.replace(" ", "");
+      return op.equals("+") || op.equals("-") || op.equals("*") || op.equals("/") ;
+   }
+
 
 }
