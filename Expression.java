@@ -12,7 +12,7 @@ public class Expression extends ExpressionTree {
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
 
-      parseInput(s,list);
+      splitStringToList(s,list);
 
       for(int i =0; i < list.size(); i++){
          System.out.println(list.get(i));
@@ -67,7 +67,7 @@ public class Expression extends ExpressionTree {
    }
 
    //includes some recycled code from project 1 that breaks up input string into pieces.
-   private void parseInput(String s, ArrayList<String> list){
+   private void splitStringToList(String s, ArrayList<String> list){
       //get rid of spaces from the string
       int i = 0;
       String beforeCurrentChar;
