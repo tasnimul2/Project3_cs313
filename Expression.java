@@ -2,11 +2,36 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Expression extends ExpressionTree {
-
+   ArrayList<String> postFix;
    public String fullyParenthesized() {
       // add implementation here
+      ArrayList<String> output = new ArrayList<>();
+      fullyParenthesized((BNode<String>) this.root, output);
+      System.out.println(output.toString());
+     return "";
+   }
+   Stack<String> tracker = new Stack<>();
+   int counter = 0;
+   private void fullyParenthesized(BNode<String> node, ArrayList<String> list){
 
-      return "";
+      if (node == null){
+         return ;
+
+      }
+
+
+
+
+      fullyParenthesized(node.left,list);
+      list.add(node.data );
+      fullyParenthesized(node.right,list);
+      list.add(")");
+
+
+
+
+
+
    }
 
 
@@ -14,7 +39,7 @@ public class Expression extends ExpressionTree {
       super();
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
-      ArrayList<String> postFix = new ArrayList<>();
+
 
       splitStringToList(s,list);
       postFix = infixToPostfix(list);
@@ -47,6 +72,8 @@ public class Expression extends ExpressionTree {
                this.root = root;
                root.right = stk.pop();
                root.left= stk.pop();
+               root.right.parent = root;
+               root.left.parent = root;
                stk.push(root);
 
             }
