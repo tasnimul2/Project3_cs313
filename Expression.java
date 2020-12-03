@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Expression extends ExpressionTree {
 
@@ -11,12 +12,18 @@ public class Expression extends ExpressionTree {
       super();
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
+      ArrayList<String> postFix = new ArrayList<>();
 
       splitStringToList(s,list);
 
-      for(int i =0; i < list.size(); i++){
-         System.out.println(list.get(i));
+
+
+     postFix = infixToPostfix(list);
+
+      for(int i =0; i < postFix.size(); i++){
+         System.out.println(postFix.get(i));
       }
+
 
       try {
 
@@ -55,6 +62,12 @@ public class Expression extends ExpressionTree {
 
       return currChar == '+' || currChar =='-' || currChar == '*' || currChar =='/' || currChar == '(' || currChar ==')';
    }
+   private boolean isOperator(String currChar){
+      //remove the space from the operator
+
+      return currChar.equals("+") || currChar.equals("-")  || currChar.equals("*")|| currChar.equals("/") || currChar.equals("(") || currChar.equals(")");
+   }
+
 
    private boolean isDigit(String num){
 
@@ -96,21 +109,93 @@ public class Expression extends ExpressionTree {
 
           if(!isOperator(currChar)) {
             sect+= ""+ currChar;
+             //System.out.println("sect "+ sect);
+             //System.out.println("char" + currChar);
          }else {
              //if two operators are next to each other, it creates a white space. This avoids it.
              if(!sect.equals("")) {
                 list.add(sect);
-
+                sect = "";
+                //System.out.println("sect in if "+ sect);
+                //System.out.println("char in if " + currChar);
              }
-             sect = "";
+
              list.add(""+currChar);
+             //System.out.println("sect out if"+ sect);
+             //System.out.println("char out if " + currChar);
           }
       }
+      list.add(sect);
 
 
+   }
+
+   private boolean isGreaterPrecedence(String inList, String inStack){
+     int listValue = 0;
+     int stackValue = 0;
+      if(inList.equals("+") ||  inList.equals("-")){
+         listValue = 1;
+
+      }else if (inList.equals("*") ||  inList.equals("/")){
+         listValue= 2;
+
+      }
+
+      if(inStack.equals("+") ||  inStack.equals("-")){
+         stackValue = 1;
+
+      }else if (inStack.equals("*") ||  inStack.equals("/")){
+         stackValue = 2;
+
+      }
+      return listValue <= stackValue;
+   }
+
+   private ArrayList<String> infixToPostfix(ArrayList<String> list){
+      String sect = "";
+      Stack<String> s = new Stack<>();
+      ArrayList<String> pfix = new ArrayList<>();
+
+      for(int i = 0; i < list.size() ;i++){
+
+         //System.out.println(list.get(i));
+         if(!isOperator(list.get(i))){
+            //sect+= list.get(i);
+            pfix.add(list.get(i));
+           // System.out.println("not operator"+ sect);
+         }else if(isOperator(list.get(i))){
+            while(!s.empty() && isGreaterPrecedence(list.get(i),s.peek()) ){
+               //sect +=  s.pop();
+               pfix.add(s.pop());
+               //s.pop();
+               //System.out.println("check precedence" + sect);
+            }
+            s.push(list.get(i));
+
+         }else if(list.get(i).equals("(")){
+            s.push(list.get(i));
+
+         }else if (list.get(i).equals(")")){
+            while(!s.empty() && !s.peek().equals("(")){
+               //sect+= s.pop();
+               pfix.add(s.pop());
 
 
+            }
+            s.pop();//removes the extra remaining ( in the stack
 
+         }
+
+
+      }
+      while (!s.empty()){
+         //sect+= s.pop();
+         pfix.add(s.pop());
+      }
+      System.out.println(s.toString());
+      System.out.println(pfix.toString());
+
+      return pfix;
    }
 
 
