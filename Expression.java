@@ -5,8 +5,10 @@ public class Expression extends ExpressionTree {
 
    public String fullyParenthesized() {
       // add implementation here
+
       return "";
    }
+
 
    public Expression(String s) {
       super();
@@ -16,14 +18,8 @@ public class Expression extends ExpressionTree {
 
       splitStringToList(s,list);
       postFix = infixToPostfix(list);
-
-      for(int i =0; i < postFix.size(); i++){
-         System.out.println(postFix.get(i));
-      }
-
-
-
       Stack<BNode<String>> stk = new Stack<>();
+
       try {
          /*
          BNode<String> node1 = new BNode<>("2",null,null,null);
@@ -60,12 +56,9 @@ public class Expression extends ExpressionTree {
 
 
 
-
       }catch (Exception e){
          System.out.println("");
       }
-
-
 
    }
    
@@ -115,7 +108,7 @@ public class Expression extends ExpressionTree {
             i++;
          }
       }
-      System.out.println(s);
+
 
 
       String sect = "";
@@ -173,17 +166,15 @@ public class Expression extends ExpressionTree {
 
       for(int i = 0; i < list.size() ;i++){
 
-         //System.out.println(list.get(i));
+
          if(!isOperator(list.get(i))){
-            //sect+= list.get(i);
+
             pfix.add(list.get(i));
-           // System.out.println("not operator"+ sect);
+
          }else if(isOperator(list.get(i))){
             while(!s.empty() && isGreaterPrecedence(list.get(i),s.peek()) ){
-               //sect +=  s.pop();
                pfix.add(s.pop());
-               //s.pop();
-               //System.out.println("check precedence" + sect);
+
             }
             s.push(list.get(i));
 
@@ -192,7 +183,7 @@ public class Expression extends ExpressionTree {
 
          }else if (list.get(i).equals(")")){
             while(!s.empty() && !s.peek().equals("(")){
-               //sect+= s.pop();
+
                pfix.add(s.pop());
 
 
@@ -204,11 +195,9 @@ public class Expression extends ExpressionTree {
 
       }
       while (!s.empty()){
-         //sect+= s.pop();
          pfix.add(s.pop());
       }
-      System.out.println(s.toString());
-      System.out.println(pfix.toString());
+
 
       return pfix;
    }
