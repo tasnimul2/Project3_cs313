@@ -3,35 +3,32 @@ import java.util.Stack;
 
 public class Expression extends ExpressionTree {
    ArrayList<String> postFix;
+
    public String fullyParenthesized() {
       // add implementation here
       ArrayList<String> output = new ArrayList<>();
+      String outputString = "";
       fullyParenthesized((BNode<String>) this.root, output);
-      System.out.println(output.toString());
-     return "";
+      for(int i = 0; i < output.size() ;i++){
+         outputString += output.get(i);
+      }
+     return outputString;
    }
-   Stack<String> tracker = new Stack<>();
-   int counter = 0;
-   private void fullyParenthesized(BNode<String> node, ArrayList<String> list){
 
+   private void fullyParenthesized(BNode<String> node, ArrayList<String> list){
       if (node == null){
          return ;
 
       }
-
-
-
-
-      fullyParenthesized(node.left,list);
-      list.add(node.data );
-      fullyParenthesized(node.right,list);
-      list.add(")");
-
-
-
-
-
-
+      if(!isOperator(node.data)){
+         list.add(node.data);
+      }else {
+         list.add("(");
+         fullyParenthesized(node.left, list);
+         list.add(node.data);
+         fullyParenthesized(node.right, list);
+         list.add(")");
+      }
    }
 
 
@@ -39,34 +36,14 @@ public class Expression extends ExpressionTree {
       super();
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
-
-
       splitStringToList(s,list);
       postFix = infixToPostfix(list);
       Stack<BNode<String>> stk = new Stack<>();
-
       try {
-         /*
-         BNode<String> node1 = new BNode<>("2",null,null,null);
-         BNode<String> node2 = new BNode<>("5",null,null,null);
-         BNode<String> root  = new BNode<String>("*",null,null,null);
-
-         this.root = root;
-         node1.parent = root;
-         node2.parent = root;
-
-         root.right = node1;
-         root.left = node2;
-         this.addRoot(root.data);
-
-         treePrint(this.root);
-
-          */
 
          for(int x = 0; x < postFix.size(); x++){
             if(!isOperator(postFix.get(x))){
                stk.push(new BNode<>(postFix.get(x),null,null,null));
-
             }else{
                BNode<String> root  = new BNode<String>(postFix.get(x),null,null,null);
                this.root = root;
@@ -75,18 +52,12 @@ public class Expression extends ExpressionTree {
                root.right.parent = root;
                root.left.parent = root;
                stk.push(root);
-
             }
-
          }
          this.addRoot(root.data);
-
-
-
       }catch (Exception e){
-         System.out.println("");
+         //System.out.println("");
       }
-
    }
    
    public double evaluate() {
@@ -98,18 +69,15 @@ public class Expression extends ExpressionTree {
 
    private boolean isOperator(char currChar){
       //remove the space from the operator
-
       return currChar == '+' || currChar =='-' || currChar == '*' || currChar =='/' || currChar == '(' || currChar ==')';
    }
    private boolean isOperator(String currChar){
       //remove the space from the operator
-
       return currChar.equals("+") || currChar.equals("-")  || currChar.equals("*")|| currChar.equals("/") || currChar.equals("(") || currChar.equals(")");
    }
 
 
    private boolean isDigit(String num){
-
       try {
          double value = Double.parseDouble(num);
       }catch (NumberFormatException e){
@@ -124,7 +92,6 @@ public class Expression extends ExpressionTree {
       int i = 0;
       String beforeCurrentChar;
       String afterCurrentChar;
-
       while (i < s.length()){
          char currentChar = s.charAt(i);
          if(currentChar == ' ' ){
@@ -135,9 +102,6 @@ public class Expression extends ExpressionTree {
             i++;
          }
       }
-
-
-
       String sect = "";
       //iterate through the string to break down the input by element
       for(int k =0; k < s.length();k++){
@@ -192,16 +156,12 @@ public class Expression extends ExpressionTree {
       ArrayList<String> pfix = new ArrayList<>();
 
       for(int i = 0; i < list.size() ;i++){
-
-
          if(!isOperator(list.get(i))){
-
             pfix.add(list.get(i));
 
          }else if(isOperator(list.get(i))){
             while(!s.empty() && isGreaterPrecedence(list.get(i),s.peek()) ){
                pfix.add(s.pop());
-
             }
             s.push(list.get(i));
 
@@ -210,22 +170,14 @@ public class Expression extends ExpressionTree {
 
          }else if (list.get(i).equals(")")){
             while(!s.empty() && !s.peek().equals("(")){
-
                pfix.add(s.pop());
-
-
             }
             s.pop();//removes the extra remaining ( in the stack
-
          }
-
-
       }
       while (!s.empty()){
          pfix.add(s.pop());
       }
-
-
       return pfix;
    }
 
