@@ -15,18 +15,17 @@ public class Expression extends ExpressionTree {
       ArrayList<String> postFix = new ArrayList<>();
 
       splitStringToList(s,list);
-
-
-
-     postFix = infixToPostfix(list);
+      postFix = infixToPostfix(list);
 
       for(int i =0; i < postFix.size(); i++){
          System.out.println(postFix.get(i));
       }
 
 
-      try {
 
+      Stack<BNode<String>> stk = new Stack<>();
+      try {
+         /*
          BNode<String> node1 = new BNode<>("2",null,null,null);
          BNode<String> node2 = new BNode<>("5",null,null,null);
          BNode<String> root  = new BNode<String>("*",null,null,null);
@@ -40,6 +39,26 @@ public class Expression extends ExpressionTree {
          this.addRoot(root.data);
 
          treePrint(this.root);
+
+          */
+
+         for(int x = 0; x < postFix.size(); x++){
+            if(!isOperator(postFix.get(x))){
+               stk.push(new BNode<>(postFix.get(x),null,null,null));
+
+            }else{
+               BNode<String> root  = new BNode<String>(postFix.get(x),null,null,null);
+               this.root = root;
+               root.right = stk.pop();
+               root.left= stk.pop();
+               stk.push(root);
+
+            }
+
+         }
+         this.addRoot(root.data);
+
+
 
 
       }catch (Exception e){
@@ -100,7 +119,6 @@ public class Expression extends ExpressionTree {
 
 
       String sect = "";
-
       //iterate through the string to break down the input by element
       for(int k =0; k < s.length();k++){
          char currChar = s.charAt(k);
@@ -109,20 +127,17 @@ public class Expression extends ExpressionTree {
 
           if(!isOperator(currChar)) {
             sect+= ""+ currChar;
-             //System.out.println("sect "+ sect);
-             //System.out.println("char" + currChar);
+
          }else {
              //if two operators are next to each other, it creates a white space. This avoids it.
              if(!sect.equals("")) {
                 list.add(sect);
                 sect = "";
-                //System.out.println("sect in if "+ sect);
-                //System.out.println("char in if " + currChar);
+
              }
 
              list.add(""+currChar);
-             //System.out.println("sect out if"+ sect);
-             //System.out.println("char out if " + currChar);
+
           }
       }
       list.add(sect);
