@@ -69,7 +69,7 @@ public class Expression extends ExpressionTree {
 
    private boolean isOperator(char currChar){
       //remove the space from the operator
-      return currChar == '+' || currChar =='-' || currChar == '*' || currChar =='/' || currChar == '(' || currChar ==')';
+      return currChar == '+' || currChar =='-' || currChar == '*' || currChar =='/' ;
    }
    private boolean isOperator(String currChar){
       //remove the space from the operator
