@@ -73,7 +73,7 @@ public class Expression extends ExpressionTree {
    }
    private boolean isOperator(String currChar){
       //remove the space from the operator
-      return currChar.equals("+") || currChar.equals("-")  || currChar.equals("*")|| currChar.equals("/") || currChar.equals("(") || currChar.equals(")");
+      return currChar.equals("+") || currChar.equals("-")  || currChar.equals("*")|| currChar.equals("/");
    }
 
 
@@ -129,57 +129,55 @@ public class Expression extends ExpressionTree {
 
    }
 
-   private boolean isGreaterPrecedence(String inList, String inStack){
-     int listValue = 0;
-     int stackValue = 0;
+   private int precedence(String inList){
+
       if(inList.equals("+") ||  inList.equals("-")){
-         listValue = 1;
+         return  1;
 
       }else if (inList.equals("*") ||  inList.equals("/")){
-         listValue= 2;
+         return 2;
 
       }
 
-      if(inStack.equals("+") ||  inStack.equals("-")){
-         stackValue = 1;
-
-      }else if (inStack.equals("*") ||  inStack.equals("/")){
-         stackValue = 2;
-
-      }
-      return listValue <= stackValue;
+      return -1;
    }
 
    private ArrayList<String> infixToPostfix(ArrayList<String> list){
-      String sect = "";
-      Stack<String> s = new Stack<>();
+
+      Stack<String> stack = new Stack<>();
       ArrayList<String> pfix = new ArrayList<>();
 
-      for(int i = 0; i < list.size() ;i++){
-         if(!isOperator(list.get(i))){
-            pfix.add(list.get(i));
+      for(int i = 0; i < list.size();i++){
 
-         }else if(isOperator(list.get(i))){
-            while(!s.empty() && isGreaterPrecedence(list.get(i),s.peek()) ){
-               pfix.add(s.pop());
+         if(isOperator(list.get(i))){
+            while(!stack.isEmpty() && precedence(stack.peek()) >= precedence(list.get(i))){
+               pfix.add(stack.pop());
             }
-            s.push(list.get(i));
+            stack.push(list.get(i));
 
+         }else if(list.get(i).equals(")")){
+            String temp = stack.pop();
+            while(!temp.equals("(")){
+               pfix.add(temp);
+               temp = stack.pop();
+            }
          }else if(list.get(i).equals("(")){
-            s.push(list.get(i));
-
-         }else if (list.get(i).equals(")")){
-            while(!s.empty() && !s.peek().equals("(")){
-               pfix.add(s.pop());
-            }
-            s.pop();//removes the extra remaining ( in the stack
+            stack.push(list.get(i));
+         }else{
+            pfix.add(list.get(i));
          }
+
       }
-      while (!s.empty()){
-         pfix.add(s.pop());
+      while (!stack.empty()){
+         pfix.add(stack.pop());
       }
       return pfix;
+
+
    }
+
+
+
 
 
 }
