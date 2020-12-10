@@ -62,7 +62,31 @@ public class Expression extends ExpressionTree {
    
    public double evaluate() {
       // add implementation here
-      return 0.0;
+      Stack<Double> stack = new Stack<>();
+      for(int i = 0; i < postFix.size(); i++){
+         if(isDigit(postFix.get(i))){
+            stack.push(Double.parseDouble(postFix.get(i)));
+         }else{
+            double num1 = stack.pop();
+            double num2 = stack.pop();
+
+            switch (postFix.get(i)){
+               case "+":
+                  stack.push(num1 + num2);
+                  break;
+               case "-":
+                  stack.push(num1-num2);
+                  break;
+               case "*":
+                  stack.push(num1*num2);
+                  break;
+               case "/":
+                  stack.push(num1/num2);
+                  break;
+            }
+         }
+      }
+      return stack.pop();
    }
 
    //----------------------------------------- Private Helper Methods -------------------------------//
@@ -76,7 +100,7 @@ public class Expression extends ExpressionTree {
       return currChar.equals("+") || currChar.equals("-")  || currChar.equals("*")|| currChar.equals("/");
    }
 
-
+   //my isDigit method accepts a string. (overloaded version of isDigit from character Class)
    private boolean isDigit(String num){
       try {
          double value = Double.parseDouble(num);
