@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 public class Expression extends ExpressionTree {
    ArrayList<String> postFix;
-   ArrayList<String> defExp;
+
 
    public String fullyParenthesized() {
       // add implementation here
@@ -38,9 +39,7 @@ public class Expression extends ExpressionTree {
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
       splitStringToList(s,list);
-      defExp = list;
       postFix = infixToPostfix(list);
-      //System.out.println(defExp.toString());
 
       Stack<BNode<String>> stk = new Stack<>();
       try {
@@ -63,57 +62,36 @@ public class Expression extends ExpressionTree {
          //System.out.println("");
       }
    }
-   
+
    public double evaluate() {
       // add implementation here
-      System.out.println(postFix.toString());
       Stack<Double> stack = new Stack<>();
       Double result = 0.0;
-      for(int i = 0; i < postFix.size() - 1 ; i++){
+      for(int i = 0; i < postFix.size() ; i++){
          if(isDigit(postFix.get(i))){
-            System.out.println("current i:" + postFix.get(i));
             stack.push(Double.parseDouble(postFix.get(i)));
          }else{
             double num1 = stack.pop();
             double num2 = stack.pop();
-            //System.out.println(num1);
-            //System.out.println(num2);
 
             switch (postFix.get(i)){
 
                case "+":
-                  System.out.println(postFix.get(i));
-                  System.out.println(num1);
-                  System.out.println(num2);
                   result = stack.push(num2 + num1);
-                  System.out.println(result);
                   break;
                case "-":
-                  System.out.println(postFix.get(i));
-                  System.out.println(num1);
-                  System.out.println(num2);
                   result = stack.push(num2-num1);
-                  System.out.println(result);
                   break;
                case "*":
-                  System.out.println(postFix.get(i));
-                  System.out.println(num1);
-                  System.out.println(num2);
                   result = stack.push(num2*num1);
-                  System.out.println(result);
                   break;
                case "/":
-                  System.out.println(postFix.get(i));
-                  System.out.println(num1);
-                  System.out.println(num2);
                   result = stack.push(num2/num1);
-                  System.out.println(result);
                   break;
             }
          }
 
       }
-      System.out.println(stack.toString());
       return result;
 
 
@@ -195,7 +173,8 @@ public class Expression extends ExpressionTree {
 
       return -1;
    }
-
+   //method that is responsible for converting a an ArrayList contain infix expression and returning an arrayList containing a postfix expression.
+   //each element contain a number or an operator. This was done to make sure numbers with decimal or multiple digits are not counted as two different numbers.
    private ArrayList<String> infixToPostfix(ArrayList<String> list){
 
       Stack<String> stack = new Stack<>();
@@ -225,12 +204,15 @@ public class Expression extends ExpressionTree {
       while (!stack.empty()){
          pfix.add(stack.pop());
       }
-
-      for(String item : pfix){
+      // remove the empty elements in an arraylist created when transferring the characters in the string to the arrayList.
+      for (Iterator<String> iterator = pfix.iterator(); iterator.hasNext(); ) {
+         String item = iterator.next();
          if(item.equals("")){
-            pfix.remove(item);
+            iterator.remove();
          }
       }
+
+
       return pfix;
 
 
