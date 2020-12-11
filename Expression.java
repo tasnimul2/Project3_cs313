@@ -3,6 +3,7 @@ import java.util.Stack;
 
 public class Expression extends ExpressionTree {
    ArrayList<String> postFix;
+   ArrayList<String> defExp;
 
    public String fullyParenthesized() {
       // add implementation here
@@ -37,7 +38,10 @@ public class Expression extends ExpressionTree {
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
       splitStringToList(s,list);
+      defExp = list;
       postFix = infixToPostfix(list);
+      //System.out.println(defExp.toString());
+
       Stack<BNode<String>> stk = new Stack<>();
       try {
 
@@ -62,31 +66,27 @@ public class Expression extends ExpressionTree {
    
    public double evaluate() {
       // add implementation here
+
       Stack<Double> stack = new Stack<>();
       for(int i = 0; i < postFix.size(); i++){
          if(isDigit(postFix.get(i))){
             stack.push(Double.parseDouble(postFix.get(i)));
-         }else{
-            double num1 = stack.pop();
-            double num2 = stack.pop();
-
-            switch (postFix.get(i)){
-               case "+":
-                  stack.push(num1 + num2);
-                  break;
-               case "-":
-                  stack.push(num1-num2);
-                  break;
-               case "*":
-                  stack.push(num1*num2);
-                  break;
-               case "/":
-                  stack.push(num1/num2);
-                  break;
-            }
+         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("+")){
+            stack.push(stack.pop()+ stack.pop());
+         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("-")){
+            stack.push(stack.pop()-stack.pop());
+         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("*")){
+            stack.push(stack.pop()*stack.pop());
+         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("/")){
+            stack.push(stack.pop()/stack.pop());
          }
+            //double num1 = stack.pop();
+            //double num2 = stack.pop();
+
       }
-      return stack.pop();
+      return stack.peek();
+
+
    }
 
    //----------------------------------------- Private Helper Methods -------------------------------//
@@ -133,7 +133,7 @@ public class Expression extends ExpressionTree {
 
          //if we come across a + or a -, anything coming before it , up to the previous + or - is a term
 
-          if(!isOperator(currChar)) {
+          if(!isOperator(currChar) && currChar !='(' && currChar != ')') {
             sect+= ""+ currChar;
 
          }else {
@@ -172,9 +172,9 @@ public class Expression extends ExpressionTree {
       ArrayList<String> pfix = new ArrayList<>();
 
       for(int i = 0; i < list.size();i++){
-
+         //if the current element is an operator
          if(isOperator(list.get(i))){
-            while(!stack.isEmpty() && precedence(stack.peek()) >= precedence(list.get(i))){
+            while(!stack.isEmpty() && precedence(stack.peek()) >= precedence(list.get(i))){ // while  the stack isnt empty and we come across a lower precedence operator
                pfix.add(stack.pop());
             }
             stack.push(list.get(i));
