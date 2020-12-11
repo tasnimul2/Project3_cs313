@@ -161,6 +161,7 @@ public class Expression extends ExpressionTree {
 
    }
 
+   //tells you what the precedence of the operators is
    private int precedence(String inList){
 
       if(inList.equals("+") ||  inList.equals("-")){
@@ -184,26 +185,27 @@ public class Expression extends ExpressionTree {
          //if the current element is an operator
          if(isOperator(list.get(i))){
             while(!stack.isEmpty() && precedence(stack.peek()) >= precedence(list.get(i))){ // while  the stack isnt empty and we come across a lower precedence operator
-               pfix.add(stack.pop());
+               pfix.add(stack.pop()); //empty out the stack
             }
-            stack.push(list.get(i));
+            stack.push(list.get(i)); //if the stack is empty or the operator in the stack is not of lower precedence , put the operator in the stack
 
-         }else if(list.get(i).equals(")")){
+         }else if(list.get(i).equals(")")){ //if its not an operator but it is a ")" we need to empty out the stack
             String temp = stack.pop();
-            while(!temp.equals("(")){
+            while(!temp.equals("(")){ //until we see the "(" that  goes with it
                pfix.add(temp);
                temp = stack.pop();
             }
          }else if(list.get(i).equals("(")){
-            stack.push(list.get(i));
+            stack.push(list.get(i)); //if we see a ( , push it in the stack
          }else{
-            pfix.add(list.get(i));
+            pfix.add(list.get(i)); //or else just put in the digit in the arrayList.
          }
 
       }
-      while (!stack.empty()){
+      while (!stack.empty()){ //there are leftover operators that need to be taken care of
          pfix.add(stack.pop());
       }
+
       // remove the empty elements in an arraylist created when transferring the characters in the string to the arrayList.
       for (Iterator<String> iterator = pfix.iterator(); iterator.hasNext(); ) {
          String item = iterator.next();
