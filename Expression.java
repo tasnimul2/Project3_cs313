@@ -17,6 +17,7 @@ public class Expression extends ExpressionTree {
      return outputString;
    }
 
+   //do inorder traversal to add parenthesis to every subtree.
    private void fullyParenthesized(BNode<String> node, ArrayList<String> list){
       if (node == null){
          return ;
@@ -38,26 +39,27 @@ public class Expression extends ExpressionTree {
       super();
       // add implementation here
       ArrayList<String> list = new ArrayList<>();
-      splitStringToList(s,list);
-      postFix = infixToPostfix(list);
+      splitStringToList(s,list); //transfer the input string inside the arrayList
+      postFix = infixToPostfix(list); //convert the ArrayList, initially infix, into postfix. Then have postFix arrayList point to the resulting arrayList,
 
       Stack<BNode<String>> stk = new Stack<>();
       try {
-
+         //convert the arrayList into a tree
          for(int x = 0; x < postFix.size(); x++){
-            if(!isOperator(postFix.get(x))){
+            if(!isOperator(postFix.get(x))){  //if it is not an operator put it in the stack. it will be a child/leaf
                stk.push(new BNode<>(postFix.get(x),null,null,null));
             }else{
+               //if it is an operator, it will be a root.
                BNode<String> root  = new BNode<String>(postFix.get(x),null,null,null);
                this.root = root;
-               root.right = stk.pop();
+               root.right = stk.pop(); //the top two BNodes in the stacks will be its child
                root.left= stk.pop();
                root.right.parent = root;
                root.left.parent = root;
                stk.push(root);
             }
          }
-         this.addRoot(root.data);
+         this.addRoot(root.data); // "this" is the main tree, so we add the roots data in the main tree.
       }catch (Exception e){
          //System.out.println("");
       }
@@ -67,18 +69,18 @@ public class Expression extends ExpressionTree {
       // add implementation here
       Stack<Double> stack = new Stack<>();
       Double result = 0.0;
-      for(int i = 0; i < postFix.size() ; i++){
+      for(int i = 0; i < postFix.size() ; i++){ //iterate through the postFix equation and evaluate it
          if(isDigit(postFix.get(i))){
-            stack.push(Double.parseDouble(postFix.get(i)));
+            stack.push(Double.parseDouble(postFix.get(i)));  //if the current element is a number then make sure it is a double and push it to the stack.
          }else{
-            double num1 = stack.pop();
-            double num2 = stack.pop();
+            double num1 = stack.pop(); //take out the top two elements in the stack to evaluate
+            double num2 = stack.pop(); //when we come across an operator to do arithmetic on.
 
             switch (postFix.get(i)){
 
                case "+":
-                  result = stack.push(num2 + num1);
-                  break;
+                  result = stack.push(num2 + num1); //if it  is a +-*/, perform the correct operator w/ the two numbers together, put it in the stack
+                  break;                                 //also store the resulting value in the result variable
                case "-":
                   result = stack.push(num2-num1);
                   break;
@@ -93,8 +95,6 @@ public class Expression extends ExpressionTree {
 
       }
       return result;
-
-
    }
 
    //----------------------------------------- Private Helper Methods -------------------------------//
