@@ -66,25 +66,55 @@ public class Expression extends ExpressionTree {
    
    public double evaluate() {
       // add implementation here
-
+      System.out.println(postFix.toString());
       Stack<Double> stack = new Stack<>();
-      for(int i = 0; i < postFix.size(); i++){
+      Double result = 0.0;
+      for(int i = 0; i < postFix.size() - 1 ; i++){
          if(isDigit(postFix.get(i))){
+            System.out.println("current i:" + postFix.get(i));
             stack.push(Double.parseDouble(postFix.get(i)));
-         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("+")){
-            stack.push(stack.pop()+ stack.pop());
-         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("-")){
-            stack.push(stack.pop()-stack.pop());
-         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("*")){
-            stack.push(stack.pop()*stack.pop());
-         }else if(isOperator(postFix.get(i)) && postFix.get(i).equals("/")){
-            stack.push(stack.pop()/stack.pop());
+         }else{
+            double num1 = stack.pop();
+            double num2 = stack.pop();
+            //System.out.println(num1);
+            //System.out.println(num2);
+
+            switch (postFix.get(i)){
+
+               case "+":
+                  System.out.println(postFix.get(i));
+                  System.out.println(num1);
+                  System.out.println(num2);
+                  result = stack.push(num2 + num1);
+                  System.out.println(result);
+                  break;
+               case "-":
+                  System.out.println(postFix.get(i));
+                  System.out.println(num1);
+                  System.out.println(num2);
+                  result = stack.push(num2-num1);
+                  System.out.println(result);
+                  break;
+               case "*":
+                  System.out.println(postFix.get(i));
+                  System.out.println(num1);
+                  System.out.println(num2);
+                  result = stack.push(num2*num1);
+                  System.out.println(result);
+                  break;
+               case "/":
+                  System.out.println(postFix.get(i));
+                  System.out.println(num1);
+                  System.out.println(num2);
+                  result = stack.push(num2/num1);
+                  System.out.println(result);
+                  break;
+            }
          }
-            //double num1 = stack.pop();
-            //double num2 = stack.pop();
 
       }
-      return stack.peek();
+      System.out.println(stack.toString());
+      return result;
 
 
    }
@@ -194,6 +224,12 @@ public class Expression extends ExpressionTree {
       }
       while (!stack.empty()){
          pfix.add(stack.pop());
+      }
+
+      for(String item : pfix){
+         if(item.equals("")){
+            pfix.remove(item);
+         }
       }
       return pfix;
 
